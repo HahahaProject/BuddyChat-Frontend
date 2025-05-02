@@ -1,4 +1,6 @@
+// package
 import { Link } from "react-router-dom";
+// layer
 import Home from "@/shared/asset/home.svg?react";
 import Random from "@/shared/asset/random.svg?react";
 import Group from "@/shared/asset/group.svg?react";
@@ -12,10 +14,6 @@ const MenuList = () => {
 
   return (
     <>
-      {/* list로 관리하기에는 svg파일을 컴포넌트로 변환하고 있어서 임시작성
-      1. 반복적인 태그 수정
-      2. 테마변경 버튼 디자인 변경예정
-    */}
       <Link
         to="/"
         className="tw:flex tw:justify-center tw:items-center tw:p-3 tw:gap-3 tw:group tw:cursor-pointer"
