@@ -33,28 +33,14 @@ const useMatchOnEvents = (): MatchOnEventsReturn => {
   const checkRoom = useMergeList( state => state.action.checkRoom);
   const { sendRoomLeave } = roomLeave(socket);
 
-  const {
-    connectMatch,
-    disconnectMatch,
-    receiveMatchTimeout,
-    removeListener: randomMatchRemove,
-  } = randomMatch(socket);
-  const { receiveRoomAlert, removeListener: roomAlertRemove } =
-    roomAlert(socket);
+  const { connectMatch,disconnectMatch,receiveMatchTimeout,removeListener: randomMatchRemove} = randomMatch(socket);
+  const { receiveRoomAlert, removeListener: roomAlertRemove } =roomAlert(socket);
   const { receiveChatMessage, removeListener } = chatMessage(socket);
 
-  /*
-    현재 수정이 필요한 부분
-
-    채팅방을 페이지 이동으로 인해서 나가고,
-    이로인해서 채팅방이 종료가 된다
-    이후 다시 랜덤채팅 페이지로 가서 랜덤채팅을 진행하면
-    데이터 입력이 중복으로 이루어지는데, 이게 초반 알림뿐아니라
-    동적 메세지또한 중복값이 점점늘어남
-    여기서 예상할 수 있는것은, 렌더링 문제는 아닌것같고,
-    이벤트리스너 중복등록인해서?
-    chat-message 컴포넌트도 의심이 필요한부분임
-  */
+  const handleBeforeUnload = () => {
+    socket?.removeAllListeners();
+    sendRoomLeave();
+  };
 
   const startMatch = () => {
     if(!socket){
@@ -70,15 +56,19 @@ const useMatchOnEvents = (): MatchOnEventsReturn => {
     });
   };
 
+  // 채팅 시작여부 useEffect
   useEffect(()=>{
     if(!socket) return;
     if(!isRoom){
       startMatch();
     }
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       sendRoomLeave();
       checkRoom();    
+      socket.removeAllListeners();
+      window.addEventListener("beforeunload", handleBeforeUnload);
     }
   },[socket])
 
@@ -137,11 +127,14 @@ const useMatchOnEvents = (): MatchOnEventsReturn => {
           console.warn("cannot find the receiveChatMessage type");
       }
     });
-
-    return () => {
+    
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => { 
       randomMatchRemove();
       roomAlertRemove();
-      removeListener();
+      removeListener();     
+      socket.removeAllListeners(); 
+      window.addEventListener("beforeunload", handleBeforeUnload);
     };
   }, [socket]);
 

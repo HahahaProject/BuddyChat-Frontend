@@ -1,4 +1,4 @@
-// type
+// package
 import {type ReactElement} from 'react';
 // layer
 import ChatOut from "@/shared/asset/out.svg?react";
