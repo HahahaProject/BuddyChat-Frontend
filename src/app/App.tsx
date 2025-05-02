@@ -1,10 +1,8 @@
-// package
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// slice
 import { BaseLayout } from './Layout';
-// layer
 import { Home } from "@/pages/home";
 import { Random } from '@/pages/random';
+import { Group } from '@/pages/group';
 import { path} from '@/shared/consts/paths';
 
 function App() {
@@ -15,6 +13,7 @@ function App() {
         <Route element={<BaseLayout/>}>
         <Route index element={<Home/>}/>
         <Route path={`/${path.random}`} element={<Random/>}/>
+        <Route path={`/${path.group}`} element={<Group/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

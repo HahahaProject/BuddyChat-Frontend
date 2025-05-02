@@ -24,6 +24,7 @@ const ChatInput = ():ReactElement => {
       <textarea
         className="tw:grow tw:outline-none tw:resize-none tw:peer"
         placeholder="채팅 메세지를 입력해주세요"
+        // problem: rows를 1이 아닌 다른값인경우 body태그의 연속적인 깜빡임 발생
         rows={1}
         ref={chatRef}
         required
